@@ -1,67 +1,22 @@
-==============================
 Chebyshev Stock Analyzer
 ==============================
 
 A Python command-line application for analyzing stock return distributions using Chebyshev’s Inequality.
-This tool allows users to evaluate how frequently returns fall within ±k standard deviations of the mean, without assuming a normal distribution.
+This tool evaluates how often stock returns fall within ±k standard deviations of the mean, without assuming a normal distribution.
 
 Overview
 
 The Chebyshev Stock Analyzer provides:
 
-Analysis of a single stock ticker over a user-defined time period
+- Analysis of a single stock ticker over a specified date range
+- Batch processing of all S&P 500 tickers with ranking of the top ten
+- Automated scraping of S&P 500 tickers from Wikipedia
+- Bulk historical price downloading via yfinance
+- Consistent tabular output for both single and batch analysis
 
-Batch analysis of all S&P 500 tickers (Top 10 ranked by empirical stability)
+The system compares empirical volatility to Chebyshev’s theoretical lower bound:
 
-Automated S&P 500 ticker list generation
-
-Bulk stock price downloading through yfinance
-
-Consistent, professional table-style output
-
-Clean and modular architecture suitable for extension
-
-The purpose of the project is to compare empirical stock volatility with Chebyshev’s theoretical minimum bound:
-
-𝑃
-(
-∣
-𝑋
-−
-𝜇
-∣
-≤
-𝑘
-𝜎
-)
-≥
-1
-−
-1
-𝑘
-2
-P(∣X−μ∣≤kσ)≥1−
-k
-2
-1
-	​
-
-Features
-For each stock analyzed, the tool calculates:
-
-Mean daily return
-
-Standard deviation
-
-Chebyshev lower bound
-
-Empirical percentage of returns within ±kσ
-
-Return interval values
-
-Number of data points
-
-Ranked results for S&P 500 batch mode
+P(|X − μ| ≤ kσ) ≥ 1 − 1/k²
 
 Installation
 
@@ -70,139 +25,50 @@ Clone the repository:
 git clone https://github.com/ashdoda/chebyshev_python.git
 cd chebyshev_python
 
-
-Install required packages:
+Install dependencies:
 
 pip install -r requirements.txt
 
-
-Dependencies:
-
-yfinance
-
-pandas
-
-requests
+Required packages:
+- yfinance
+- pandas
+- requests
 
 Usage
 
-Run the program:
+Run the application:
 
 python main.py
 
+Main menu:
 
-Menu:
+<img width="363" height="150" alt="image" src="https://github.com/user-attachments/assets/dcde8b76-e534-4a88-b911-faf47a8b79b0" />
 
-==============================
- Chebyshev Stock Analyzer
-==============================
-1) Analyze a single stock ticker
-2) Analyze all S&P 500 stocks (Top 10)
-0) Exit
+Once either mode is selected:
 
-Single-Ticker Analysis
+<img width="721" height="309" alt="image" src="https://github.com/user-attachments/assets/3949cdad-cdc5-4f2d-8048-4d31f1f1b5d8" />
 
-Example input:
+Single-Ticker Analysis Example Output:
 
-Enter stock ticker: AAPL
-Enter start date (MM-DD-YYYY): 10-01-2025
-Enter end date   (MM-DD-YYYY): 10-31-2025
-Enter your choice for k: 2
+<img width="647" height="156" alt="image" src="https://github.com/user-attachments/assets/3975248b-827d-4a18-aa52-ac05878a15f9" />
 
 
-Sample output:
+S&P 500 Batch Mode Example Output:
 
-Rank  Ticker   Empirical%   Cheby%      MeanRet    StdDev     Points
-----------------------------------------------------------------------
-1     AAPL     90.48        75.00       0.0021      0.0150      21
+<img width="649" height="332" alt="image" src="https://github.com/user-attachments/assets/54700fe7-e1ca-4ece-a8ab-cb1c7fe010f5" />
 
-Interval [±2σ]: [-0.027047, 0.033838]
+Interpretation of Results:
 
-S&P 500 Mode
+- Empirical % > Chebyshev bound → more stable than theoretical minimum
+- Empirical % near Chebyshev bound → higher volatility
 
-The tool downloads price data for all S&P 500 tickers in a single bulk operation.
+Troubleshooting:
 
-Example:
+- No data returned: invalid date range, delisted ticker, Yahoo API limit
+- Batch returns zero: future dates, network issue, rate limiting
 
-Fetching bulk price data for 503 tickers...
-Running Chebyshev analysis...
+License: MIT License (see LICENSE file)
 
-Top 10 tickers by empirical fraction within ±2σ:
+Contributing:
 
-
-Sample output:
-
-Rank  Ticker   Empirical%   Cheby%      MeanRet    StdDev     Points
-----------------------------------------------------------------------
-1     APD      100.00       75.00     -0.0044      0.0110      21
-2     ALLE     100.00       75.00     -0.0031      0.0127      21
-...
-
-Generating the S&P 500 Ticker List
-
-Run:
-
-python build_sp500_list.py
-
-
-This will:
-
-Scrape the S&P 500 constituents from Wikipedia
-
-Normalize ticker formats (e.g., BRK.B → BRK-B)
-
-Write them to sp500_tickers.txt
-
-Project Structure
-chebyshev_python/
-│
-├── main.py                # CLI and program flow
-├── chebyshev.py           # Core math functions
-├── helper.py              # Wrapper utilities
-├── price_loader.py        # Price fetching (bulk + single)
-├── build_sp500_list.py    # Downloads S&P 500 ticker list
-├── sp500_tickers.txt      # Cached tickers
-├── requirements.txt
-└── README.md
-
-Example Interpretation
-
-If empirical percentage > Chebyshev bound:
-
-The stock is more stable than the theorem guarantees.
-
-If empirical percentage is close to the bound:
-
-The stock’s return distribution is high variance or irregular.
-
-This tool helps highlight which stocks behave more consistently over the selected period.
-
-Troubleshooting
-"No data returned for ticker"
-
-Occurs when:
-
-The date range is in the future
-
-The ticker is invalid or delisted
-
-The market was closed during the range
-
-All tickers fail in S&P 500 mode
-
-Common causes:
-
-Future date ranges
-
-Internet or firewall blocking Yahoo Finance
-
-Temporary rate limiting
-
-License
-
-This project is open-source.
-If you'd like, I can generate a full MIT License file.
-
-Contributing
-
-Pull requests and feature suggestions are welcome.
+Pull requests and improvements welcome.
