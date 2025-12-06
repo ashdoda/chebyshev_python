@@ -1,4 +1,6 @@
+==============================
 Chebyshev Stock Analyzer
+==============================
 
 A Python command-line application for analyzing stock return distributions using Chebyshev’s Inequality.
 This tool allows users to evaluate how frequently returns fall within ±k standard deviations of the mean, without assuming a normal distribution.
