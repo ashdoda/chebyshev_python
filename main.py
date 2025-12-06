@@ -1,9 +1,11 @@
 # main.py
 
 import datetime
+import matplotlib.pyplot as plt
 from price_loader import fetch_bulk_close_prices, fetch_close_prices
 from helper import analyze_ticker
-from chebyshev import chebyshev_bound_for_k
+from chebyshev import chebyshev_bound_for_k, compute_returns
+from viz import plot_single_ticker_boxplot_horizontal, plot_sp500_top_boxplots_sorted
 
 
 def prompt_date(msg: str) -> str:
@@ -138,6 +140,11 @@ def run_single_ticker_mode():
     print("\nInterval [±{}σ]: [{:.6f}, {:.6f}]".format(
         k, info["lower"], info["upper"]
     ))
+    plot_choice = input("Would you like to see a box plot of returns? (y/n): ").strip().lower()
+    if plot_choice == "y":
+     plot_single_ticker_boxplot_horizontal(symbol, compute_returns(prices), k)
+
+
 
 
 def run_sp500_mode():
@@ -234,6 +241,12 @@ def run_sp500_mode():
 
     if failures:
         print(f"\nTickers with errors or insufficient data: {len(failures)}")
+    
+    choice = input("\nWould you like to see a bar chart of the Top 10 (sorted by volatility)? (y/n): ").strip().lower()
+    if choice == "y":
+       top_n = min(10, len(results_sorted))
+       top_slice = results_sorted[:top_n]
+       plot_sp500_top_boxplots_sorted(top_slice, prices_by_symbol, k)
 
 
 def main_menu():
