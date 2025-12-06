@@ -1,0 +1,4 @@
+# Requirements for Chebyshev Stock Analyzer
+pandas>=2.2.0
+requests>=2.31.0
+yfinance>=0.2.40
