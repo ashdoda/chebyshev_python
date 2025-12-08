@@ -1,5 +1,3 @@
-# helper.py (or combine inside main.py)
-
 from typing import List, Dict, Any
 from chebyshev import compute_returns, chebyshev_summary
 
